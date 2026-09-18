@@ -1,0 +1,70 @@
+---
+import { sections, glossary } from '../data/sections';
+import { withBase } from '../utils/url';
+
+interface Props {
+  currentSlug: string;
+}
+const { currentSlug } = Astro.props;
+
+const all = [...sections.map((s) => ({ slug: s.slug, label: s.navLabel, kicker: `Section ${s.number}` })),
+  { slug: glossary.slug, label: glossary.navLabel, kicker: 'Reference' }];
+
+const idx = all.findIndex((s) => s.slug === currentSlug);
+const prev = idx > 0 ? all[idx - 1] : null;
+const next = idx >= 0 && idx < all.length - 1 ? all[idx + 1] : null;
+---
+
+<nav class="pager" aria-label="Section navigation">
+  {prev ? (
+    <a href={withBase(`/${prev.slug}`)} class="pager-link prev">
+      <span class="pager-kicker">&larr; {prev.kicker}</span>
+      <span class="pager-label">{prev.label}</span>
+    </a>
+  ) : <span />}
+
+  {next ? (
+    <a href={withBase(`/${next.slug}`)} class="pager-link next">
+      <span class="pager-kicker">{next.kicker} &rarr;</span>
+      <span class="pager-label">{next.label}</span>
+    </a>
+  ) : <span />}
+</nav>
+
+<style>
+  .pager {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .pager-link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: 1.1rem 1.3rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    transition: border-color 0.15s ease;
+  }
+  .pager-link:hover { border-color: var(--accent-border); text-decoration: none; }
+  .pager-link.next { text-align: right; align-items: flex-end; }
+
+  .pager-kicker {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-tertiary);
+  }
+  .pager-label { color: var(--text-primary); font-weight: 600; }
+
+  @media (max-width: 600px) {
+    .pager { grid-template-columns: 1fr; }
+    .pager-link.next { text-align: left; align-items: flex-start; }
+  }
+</style>

@@ -1,0 +1,68 @@
+---
+import SectionLayout from '../layouts/SectionLayout.astro';
+import PlainEnglish from '../components/PlainEnglish.astro';
+import SupplyChainDiagram from '../components/diagrams/SupplyChainDiagram.astro';
+---
+
+<SectionLayout
+  slug="supply-chain"
+  kicker="Section 05"
+  title="Supply chain"
+  dek="From chip design to a finished GPU — TSMC, ASML, HBM makers, and why export controls exist."
+>
+  <PlainEnglish>
+    <p>
+      NVIDIA designs GPUs but doesn't make them — almost every advanced AI chip in the world is
+      physically manufactured by one company in Taiwan (TSMC), using machines that only one
+      company in the world can build (ASML, in the Netherlands). That makes the entire AI industry
+      dependent on a tiny handful of companies and a couple of buildings, and it's why the U.S.
+      government restricts which countries are allowed to buy the most advanced chips.
+    </p>
+  </PlainEnglish>
+
+  <h2>The chain, from raw silicon to a working GPU</h2>
+  <ol>
+    <li><strong>Chip design</strong> — NVIDIA, AMD, Google, etc. design the chip's architecture, but own no factories themselves ("fabless").</li>
+    <li><strong>Fabrication</strong> — the design gets physically manufactured onto silicon wafers, almost entirely by <strong>TSMC</strong> (Taiwan Semiconductor Manufacturing Company), which produces the overwhelming majority of the world's most advanced chips, including essentially all of NVIDIA's GPUs.</li>
+    <li><strong>Lithography equipment</strong> — TSMC's most advanced manufacturing steps require extreme ultraviolet (EUV) lithography machines, which only <strong>ASML</strong> (a Dutch company) makes. Without ASML's machines, TSMC's cutting-edge fabrication doesn't exist — this single-supplier chokepoint is one of the most important facts in the entire industry.</li>
+    <li><strong>Advanced packaging</strong> — the manufactured chip has to be bonded together with its HBM memory using TSMC's advanced packaging processes (called CoWoS); this step has itself become a bottleneck, with NVIDIA reportedly controlling around half of the available advanced-packaging capacity industry-wide.</li>
+    <li><strong>Memory (HBM)</strong> — the high-bandwidth memory stacked onto the chip is made by a small group of memory manufacturers — primarily <strong>SK Hynix</strong>, <strong>Samsung</strong>, and <strong>Micron</strong> — and HBM shortages/price increases have been a recurring bottleneck alongside packaging capacity.</li>
+  </ol>
+  <SupplyChainDiagram />
+
+  <div class="callout-note">
+    <strong>Wait, who's ASML?</strong> Most readers have never heard of ASML, despite it arguably being the
+    single most important company in the entire AI chip industry. It is the <em>only</em> company on Earth that
+    makes the extreme ultraviolet (EUV) lithography machines needed to print the finest details on the most
+    advanced chips — without them, none of TSMC's cutting-edge fabrication happens at all.
+  </div>
+
+  <h2>Why this is a chokepoint, not just a supply chain</h2>
+  <p>
+    Nearly the entire advanced-AI-chip industry runs through: one company's fabs (TSMC), one company's
+    lithography machines (ASML), and three memory makers. That concentration is exactly why export controls work
+    as a policy tool — restricting a handful of companies' ability to sell into a country meaningfully restricts
+    that country's access to frontier AI chips, and it's why the U.S. has coordinated with Japan and the
+    Netherlands (ASML's home country) to align export rules rather than acting alone.
+  </p>
+
+  <h2>Export controls, in brief</h2>
+  <ul>
+    <li>The U.S. restricts the sale of the most advanced AI chips (and the equipment used to make them) to China, on national-security grounds.</li>
+    <li>As of 2026, chipmakers with China operations (TSMC, Samsung, SK Hynix) must apply for annual export licenses rather than operating under blanket exemptions — a policy that can change terms every year.</li>
+    <li>Analysts estimate the U.S. holds something like a 20-50x advantage in AI compute produced in 2026 versus China, though estimates vary and China is pursuing its own domestic chip industry in response — the intent of the controls is less to fully block China's AI progress and more to keep it meaningfully more expensive and less efficient.</li>
+    <li>Enforcement is imperfect: there have been documented cases of restricted chips reaching China through intermediary countries or corporate structures, prompting new rules in places like Malaysia requiring advance notice of any chip re-export.</li>
+  </ul>
+  <p class="policy-note">
+    This is a live, contested policy area — presented here as mechanics and stated rationale, not a verdict on
+    whether the controls are good policy.
+  </p>
+</SectionLayout>
+
+<style>
+  .policy-note {
+    font-size: 0.88rem;
+    color: var(--text-tertiary);
+    font-style: italic;
+  }
+</style>

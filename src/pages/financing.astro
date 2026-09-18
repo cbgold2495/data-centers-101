@@ -1,0 +1,92 @@
+---
+import SectionLayout from '../layouts/SectionLayout.astro';
+import PlainEnglish from '../components/PlainEnglish.astro';
+import StatBlock from '../components/StatBlock.astro';
+import CircularFinancingDiagram from '../components/diagrams/CircularFinancingDiagram.astro';
+import CapitalStackDiagram from '../components/diagrams/CapitalStackDiagram.astro';
+import { withBase } from '../utils/url';
+
+const scaleStats = [
+  { value: '$650–700B', label: 'Hyperscaler capex, 2026 alone' },
+  { value: '$2.8–7T', label: 'Projected AI data-center infrastructure spend by 2030' },
+  { value: '~32%', label: "Share of hyperscaler capex funded by debt, mid-2026 (vs. ~9% in 2024)" },
+  { value: '$570B', label: 'U.S. data-center debt issuance, 2026 (tracking)' },
+];
+---
+
+<SectionLayout
+  slug="financing"
+  kicker="Section 06"
+  title="Financing"
+  dek="How a multi-trillion-dollar buildout gets paid for, and why circular deals worry some economists."
+>
+  <PlainEnglish>
+    <p>
+      Building all this — data centers, GPUs, power plants — costs an almost unimaginable amount
+      of money, more than even the richest tech companies can pay for out of pocket. So they're
+      borrowing heavily, and a lot of the "customers" and "investors" in this industry are actually
+      the same handful of companies doing business with each other — which makes some economists
+      nervous that the demand looks bigger than it really is.
+    </p>
+  </PlainEnglish>
+
+  <h2>The scale of it</h2>
+  <p>
+    Hyperscaler capital spending is estimated to reach roughly $650-700 billion in 2026 alone, and total AI
+    data-center infrastructure spending is projected to reach $2.8-7 trillion by 2030 depending on the estimate.
+    That's larger than many countries' entire economies, spent on buildings, chips, and power over the next
+    several years.
+  </p>
+  <StatBlock stats={scaleStats} />
+
+  <h2>Where the money comes from: equity, then debt</h2>
+  <ul>
+    <li><strong>Equity</strong> (money from investors/owners, not borrowed) is used first, mainly to fund the riskiest early stages of a project — construction, ramp-up, uncertain utilization — since equity investors absorb the risk that debt investors won't.</li>
+    <li><strong>Debt</strong> increasingly funds the rest, and its share is growing fast: incremental debt funded roughly 9% of hyperscaler capex in 2024, rising to around 32% by mid-2026. U.S. data-center debt issuance roughly doubled to about $182 billion in 2025, and 2026 issuance is tracking toward $570 billion.</li>
+    <li>Debt comes in two main flavors: <strong>corporate debt</strong> (borrowed against the whole company's balance sheet — flexible, but only available to companies with strong credit) and <strong>project-level debt</strong> (borrowed against one specific data center's contracted revenue — lets a shakier company still borrow cheaply if the project itself has a reliable customer locked in).</li>
+  </ul>
+
+  <div class="callout-note">
+    <strong>A clever trick:</strong> even a "junk-rated" neocloud can get investment-grade borrowing costs by
+    putting its GPUs and customer contracts into a separate legal entity that sells the debt — if the parent
+    company goes bankrupt, that collateral is protected, so lenders treat it as much safer than the parent
+    company itself.
+  </div>
+
+  <h2>The circular deals — why they're controversial</h2>
+  <p>A pattern that's become central to this industry, and worth explaining carefully and neutrally:</p>
+  <ol>
+    <li>NVIDIA invests in or extends financing to a neocloud (e.g. CoreWeave, Nebius).</li>
+    <li>That neocloud uses the money — plus debt raised using NVIDIA chips themselves as collateral — to buy more NVIDIA GPUs.</li>
+    <li>A hyperscaler (e.g. Microsoft) signs a large multi-year contract to rent capacity from that same neocloud — often because booking it as a rental (operating expense) rather than a purchase (capital expense) looks better on the hyperscaler's own books.</li>
+    <li>NVIDIA's revenue and the neocloud's revenue both look strong — but a meaningful share of the "demand" being counted is really the same pool of capital moving between a small number of related companies.</li>
+  </ol>
+  <CircularFinancingDiagram />
+
+  <p>
+    This is often compared to vendor financing in the dot-com era, where telecom and tech companies lent money to
+    their own customers so those customers could buy more of their equipment — inflating apparent demand right up
+    until it collapsed. The Bank for International Settlements named this circular-financing dynamic, alongside a
+    possible AI capex bust, as one of the top risks to global financial stability in its 2026 annual report. It's
+    worth being clear that this is a real, actively-debated risk flagged by serious institutions — not a fringe
+    conspiracy theory — while also representing the industry's counter-argument: that revenue and usage are real
+    and growing, and that vendor participation in financing is common in many capital-intensive industries.
+  </p>
+
+  <h2>The capital stack</h2>
+  <p>
+    However a project is financed, the risk within it is layered. Project-level debt sits at the top — safest,
+    paid first, lowest return. Corporate debt sits in the middle. Equity sits at the bottom, absorbing losses
+    first if a project underperforms, in exchange for the most upside if it succeeds.
+  </p>
+  <CapitalStackDiagram />
+
+  <div class="callout-note">
+    <strong>Is this a bubble?</strong> That's a genuinely open, actively-debated question, with real institutions
+    on record (BIS, IMF) flagging circular financing and a possible capex bust as risks — this site isn't going
+    to deliver a verdict. What's true either way: data centers and GPUs need power
+    (<a href={withBase('/power-energy')}>Section 04</a>), power and GPUs both need financing (this section), and financing
+    depends on token-economics revenue (<a href={withBase('/token-economics')}>Section 03</a>) actually materializing at the
+    scale everyone is betting on.
+  </div>
+</SectionLayout>

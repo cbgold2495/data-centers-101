@@ -1,0 +1,40 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import SectionPager from '../components/SectionPager.astro';
+
+interface Props {
+  slug: string;
+  kicker: string;
+  title: string;
+  dek: string;
+  description?: string;
+}
+
+const { slug, kicker, title, dek, description } = Astro.props;
+---
+
+<BaseLayout title={title} description={description ?? dek}>
+  <article class="container section-article">
+    <header class="section-head">
+      <span class="eyebrow">{kicker}</span>
+      <h1>{title}</h1>
+      <p class="lede">{dek}</p>
+    </header>
+
+    <div class="section-body">
+      <slot />
+    </div>
+
+    <SectionPager currentSlug={slug} />
+  </article>
+</BaseLayout>
+
+<style>
+  .section-article {
+    padding-block: 3rem 4rem;
+  }
+  .section-head {
+    margin-bottom: 2.5rem;
+  }
+  .section-head h1 { margin-bottom: 0.5rem; }
+</style>

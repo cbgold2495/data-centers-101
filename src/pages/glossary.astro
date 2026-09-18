@@ -1,0 +1,93 @@
+---
+import SectionLayout from '../layouts/SectionLayout.astro';
+import { glossaryCategories } from '../data/glossary';
+---
+
+<SectionLayout
+  slug="glossary"
+  kicker="Reference"
+  title="Glossary"
+  dek="Every term used across the site, defined in one place — grouped by category, alphabetical within each."
+>
+  <nav class="jump-nav" aria-label="Glossary categories">
+    {glossaryCategories.map((cat) => (
+      <a href={`#${cat.id}`} class="jump-chip">{cat.title}</a>
+    ))}
+  </nav>
+
+  {glossaryCategories.map((cat) => (
+    <section id={cat.id} class="glossary-category">
+      <h2>{cat.title}</h2>
+      <dl>
+        {cat.terms.map((t) => (
+          <div class="term-row">
+            <dt>{t.term}</dt>
+            <dd>{t.def}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+  ))}
+</SectionLayout>
+
+<style>
+  .jump-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .jump-chip {
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-decoration: none;
+    padding: 0.4rem 0.8rem;
+    border: 1px solid var(--border-strong);
+    border-radius: 999px;
+    background: var(--bg-raised);
+    transition: color 0.15s ease, border-color 0.15s ease;
+  }
+  .jump-chip:hover {
+    color: var(--accent-strong);
+    border-color: var(--accent-border);
+    text-decoration: none;
+  }
+
+  .glossary-category {
+    scroll-margin-top: calc(var(--header-h) + 1.5rem);
+    margin-bottom: 3rem;
+  }
+  .glossary-category h2 { margin-top: 0; }
+
+  dl { margin: 0; }
+
+  .term-row {
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: minmax(0, 15rem) 1fr;
+    gap: 0.5rem 1.5rem;
+  }
+  .term-row:first-child { padding-top: 0; }
+  .term-row:last-child { border-bottom: none; }
+
+  dt {
+    font-weight: 700;
+    color: var(--accent-strong);
+  }
+
+  dd {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+  }
+
+  @media (max-width: 640px) {
+    .term-row { grid-template-columns: 1fr; gap: 0.3rem; }
+  }
+</style>

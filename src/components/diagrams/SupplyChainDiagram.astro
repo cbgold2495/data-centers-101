@@ -1,0 +1,114 @@
+---
+// Diagram 2: chip design → fabrication (fed by lithography) → packaging (fed by memory) → finished GPU.
+---
+
+<div class="diagram-wrap">
+  <svg viewBox="0 0 700 300" role="img" aria-label="Diagram: chip design flows to fabrication by TSMC, fed by ASML lithography, then to packaging, fed by HBM memory, producing a finished GPU">
+    <!-- feeder connectors (vertical, feeder row into main row) -->
+    <g class="connector">
+      <line x1="259" y1="80" x2="259" y2="132" />
+      <polygon points="252,132 266,132 259,142" />
+    </g>
+    <g class="connector">
+      <line x1="439" y1="80" x2="439" y2="132" />
+      <polygon points="432,132 446,132 439,142" />
+    </g>
+
+    <!-- main row connectors (horizontal) -->
+    <g class="connector">
+      <line x1="152" y1="178" x2="176" y2="178" />
+      <polygon points="176,171 176,185 186,178" />
+    </g>
+    <g class="connector">
+      <line x1="332" y1="178" x2="356" y2="178" />
+      <polygon points="356,171 356,185 366,178" />
+    </g>
+    <g class="connector">
+      <line x1="512" y1="178" x2="536" y2="178" />
+      <polygon points="536,171 536,185 546,178" />
+    </g>
+
+    <!-- feeder: Lithography (ASML) -->
+    <rect x="174" y="16" width="170" height="64" rx="10" class="box feeder" />
+    <text x="259" y="36" text-anchor="middle" class="feed-tag">EQUIPMENT</text>
+    <text x="259" y="54" text-anchor="middle" class="box-title small">Lithography</text>
+    <text x="259" y="69" text-anchor="middle" class="box-sub">ASML (EUV machines)</text>
+
+    <!-- feeder: Memory (HBM) -->
+    <rect x="354" y="16" width="170" height="64" rx="10" class="box feeder" />
+    <text x="439" y="36" text-anchor="middle" class="feed-tag">MEMORY</text>
+    <text x="439" y="54" text-anchor="middle" class="box-title small">Memory (HBM)</text>
+    <text x="439" y="69" text-anchor="middle" class="box-sub">SK Hynix, Samsung, Micron</text>
+
+    <!-- main row: 4 boxes -->
+    <rect x="8" y="144" width="144" height="68" rx="10" class="box" />
+    <text x="80" y="170" text-anchor="middle" class="step-tag">STEP 1</text>
+    <text x="80" y="188" text-anchor="middle" class="box-title small">Chip design</text>
+    <text x="80" y="203" text-anchor="middle" class="box-sub">NVIDIA, AMD (fabless)</text>
+
+    <rect x="186" y="144" width="146" height="68" rx="10" class="box" />
+    <text x="259" y="170" text-anchor="middle" class="step-tag">STEP 2</text>
+    <text x="259" y="188" text-anchor="middle" class="box-title small">Fabrication</text>
+    <text x="259" y="203" text-anchor="middle" class="box-sub">TSMC</text>
+
+    <rect x="366" y="144" width="146" height="68" rx="10" class="box" />
+    <text x="439" y="170" text-anchor="middle" class="step-tag">STEP 3</text>
+    <text x="439" y="188" text-anchor="middle" class="box-title small">Packaging</text>
+    <text x="439" y="203" text-anchor="middle" class="box-sub">CoWoS (TSMC)</text>
+
+    <rect x="546" y="144" width="146" height="68" rx="10" class="box accent" />
+    <text x="619" y="170" text-anchor="middle" class="step-tag accent-tag">RESULT</text>
+    <text x="619" y="188" text-anchor="middle" class="box-title small">Finished GPU</text>
+    <text x="619" y="203" text-anchor="middle" class="box-sub">Ready for data centers</text>
+
+    <!-- caption -->
+    <text x="350" y="254" text-anchor="middle" class="caption">Nearly every advanced AI chip passes through one fab (TSMC) and one lithography supplier (ASML).</text>
+  </svg>
+</div>
+
+<style>
+  .diagram-wrap { margin: 1.8em 0 2.2em; }
+  svg { width: 100%; height: auto; }
+
+  .box { fill: var(--bg-raised); stroke: var(--border); stroke-width: 1.5; }
+  .box.feeder { fill: var(--accent-dim); stroke: var(--accent-border); }
+  .box.accent { fill: var(--highlight-dim); stroke: var(--highlight-border); }
+
+  .feed-tag {
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    fill: var(--accent-strong);
+  }
+  .step-tag {
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    fill: var(--highlight);
+  }
+  .step-tag.accent-tag { fill: var(--highlight-strong); }
+
+  .box-title {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    fill: var(--text-primary);
+  }
+  .box-title.small { font-size: 13.5px; }
+
+  .box-sub {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    fill: var(--text-secondary);
+  }
+
+  .caption {
+    font-family: var(--font-body);
+    font-size: 12.5px;
+    fill: var(--text-tertiary);
+  }
+
+  .connector line { stroke: var(--border-strong); stroke-width: 2; }
+  .connector polygon { fill: var(--border-strong); }
+</style>

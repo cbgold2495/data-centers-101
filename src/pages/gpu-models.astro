@@ -1,0 +1,174 @@
+---
+import SectionLayout from '../layouts/SectionLayout.astro';
+import PlainEnglish from '../components/PlainEnglish.astro';
+import BarChart from '../components/BarChart.astro';
+import { withBase } from '../utils/url';
+
+const marketShare = [
+  { label: 'NVIDIA', value: 80, display: '~75–85%', color: 'accent' as const },
+  { label: 'AMD', value: 8.5, display: '~7–10%', color: 'teal' as const },
+  { label: 'Custom silicon', value: 11.5, display: 'most of the rest', sub: 'Google, AWS, Microsoft, Meta', color: 'highlight' as const },
+];
+
+const memoryCapacity = [
+  { label: 'H100', value: 80, display: '80 GB', sub: 'HBM3', color: 'accent' as const },
+  { label: 'H200', value: 141, display: '141 GB', sub: 'HBM3e', color: 'accent' as const },
+  { label: 'MI300X', value: 192, display: '192 GB+', sub: 'HBM3', color: 'teal' as const },
+  { label: 'B200', value: 192, display: '192 GB', sub: 'HBM3e', color: 'highlight' as const },
+];
+---
+
+<SectionLayout
+  slug="gpu-models"
+  kicker="Section 02"
+  title="GPU models"
+  dek="What GPUs are, why they run AI, and how the NVIDIA lineup, AMD, and custom silicon compare."
+>
+  <PlainEnglish>
+    <p>
+      A GPU is the chip that does the actual "thinking" for AI. Different GPUs are like
+      different-sized brains — some are cheaper and good enough for most jobs (H100), some have a
+      bigger memory so they can hold a bigger model in their head at once (H200, B200), and some
+      companies build their own custom chips instead of buying from NVIDIA to save money (Google's
+      TPU, Amazon's Trainium). Teaching a model (training) and using it to answer a question
+      (inference) are different jobs that favor different chips.
+    </p>
+  </PlainEnglish>
+
+  <h2>Why GPUs at all</h2>
+  <p>
+    GPUs were originally built to render graphics — pushing the same simple calculation across millions of pixels
+    at once. That "do the same math on huge amounts of data in parallel" design turns out to be exactly what
+    training and running AI models needs, since both are fundamentally massive matrix multiplication. That's the
+    whole reason GPUs, not traditional CPUs, became the default hardware for AI.
+  </p>
+
+  <h2>Training vs. inference: different jobs, different hardware priorities</h2>
+  <ul>
+    <li><strong>Training</strong> — teaching a model by processing enormous datasets and adjusting its parameters. Extremely compute- and memory-bandwidth-heavy; benefits most from raw FLOPS and fast chip-to-chip interconnect across huge clusters.</li>
+    <li><strong>Inference</strong> — running an already-trained model to answer a single prompt. Less compute per request, but memory capacity matters a lot (bigger memory means a whole model, or more of it, fits on fewer chips) and it happens at massive volume, so cost-per-token becomes the deciding metric.</li>
+  </ul>
+  <p>
+    This split explains most of the hardware choices below: newer/bigger-memory chips are increasingly being
+    reserved for high-value inference, while training runs are often done on a cost-efficient mix of current and
+    older generations.
+  </p>
+
+  <div class="callout-note">
+    <strong>Why B200-class chips need liquid cooling:</strong> Blackwell draws roughly 1,000W per GPU — several
+    times a traditional server chip — so the air-cooling used in most existing data center halls can't keep it
+    within temperature limits. That's one reason "AI / GPU hall" is becoming its own <a href={withBase('/structural-stack')}>data center category</a>: purpose-built, liquid-cooled, and denser than a standard facility.
+  </div>
+
+  <h2>The NVIDIA lineup <span class="section-note">(roughly 75–85% of the market)</span></h2>
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Chip</th><th>Memory</th><th>Notable trait</th><th>Best fit</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>H100</td>
+          <td>80 GB HBM3</td>
+          <td>The default workhorse since 2023; cheapest and most available of the current generation</td>
+          <td>Cost-sensitive training, general-purpose workloads</td>
+        </tr>
+        <tr>
+          <td>H200</td>
+          <td>141 GB HBM3e, ~4.8 TB/s bandwidth</td>
+          <td>Same core chip as H100, just a big memory upgrade — same compute, far more memory</td>
+          <td>Serving long-context models and models up to ~100B params without needing multiple GPUs</td>
+        </tr>
+        <tr>
+          <td>B200 (Blackwell)</td>
+          <td>192 GB HBM3e, native FP4 support</td>
+          <td>A genuinely new architecture: ~4x H100's inference throughput, but 1,000W and requires liquid cooling</td>
+          <td>High-value production inference, new large training runs where the throughput gain pays for the higher cost</td>
+        </tr>
+        <tr>
+          <td>GB200 / GB200 NVL72</td>
+          <td>72 B200 GPUs + 36 Grace CPUs per rack</td>
+          <td>A full rack wired together with NVLink to behave like one giant GPU</td>
+          <td>Frontier-scale training and inference at the data-center level</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    NVIDIA's next generation, <strong>Vera Rubin</strong>, is expected in the second half of 2026 with even more
+    memory and bandwidth — the pattern of "new generation roughly every year, each one a step-change in memory
+    and throughput" is likely to continue.
+  </p>
+
+  <h2>The AMD alternative</h2>
+  <p>
+    <strong>MI300X / MI325X</strong> — AMD's answer to NVIDIA, competing mainly on price and memory: comparable
+    throughput at meaningfully lower cost per chip, with very large memory pools (192 GB+) that let a single chip
+    serve a full 70-billion-parameter model without splitting it across multiple GPUs. The tradeoff is NVIDIA's
+    much more mature software ecosystem (CUDA), so switching to AMD (ROCm) takes real engineering effort. AMD
+    holds roughly 7–10% of the market.
+  </p>
+
+  <h2>Custom silicon — hyperscalers building their own chips</h2>
+  <p>
+    The biggest cloud companies are increasingly designing their own AI chips instead of only buying NVIDIA's,
+    mainly to cut cost and reduce dependency:
+  </p>
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Chip</th><th>Built by</th><th>Focus</th><th>Notable detail</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>TPU (v6 "Trillium", v7 "Ironwood")</td>
+          <td>Google</td>
+          <td>Training and inference</td>
+          <td>Runs Google's own models (Gemini) and is now also used by outside customers — Anthropic and Meta have both signed large TPU commitments</td>
+        </tr>
+        <tr>
+          <td>Trainium</td>
+          <td>AWS</td>
+          <td>Training and inference</td>
+          <td>Only available through AWS — signing up for Trainium means signing up for AWS as your sole provider</td>
+        </tr>
+        <tr>
+          <td>Maia</td>
+          <td>Microsoft</td>
+          <td>Inference-focused</td>
+          <td>Powers Copilot and OpenAI API traffic on Azure</td>
+        </tr>
+        <tr>
+          <td>MTIA</td>
+          <td>Meta</td>
+          <td>Inference-focused</td>
+          <td>Built for Meta's own internal workloads (recommendation systems, some AI inference)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    Custom silicon can cut inference costs 30–50% versus equivalent GPU capacity, since the chip, network, and
+    software framework are all designed together — but it locks a customer into that one cloud provider's
+    ecosystem.
+  </p>
+
+  <h2>The market snapshot</h2>
+  <p>Roughly how AI accelerator revenue splits today — though custom ASICs are growing faster in unit terms than GPU-based systems:</p>
+  <BarChart items={marketShare} max={100} />
+
+  <h3>Memory capacity, side by side</h3>
+  <p>The single spec that most directly explains why certain chips fit certain models — more memory means a bigger model fits on fewer chips:</p>
+  <BarChart items={memoryCapacity} />
+</SectionLayout>
+
+<style>
+  .section-note {
+    font-family: var(--font-mono);
+    font-size: 0.55em;
+    font-weight: 500;
+    color: var(--text-tertiary);
+    text-transform: none;
+    letter-spacing: 0;
+  }
+</style>

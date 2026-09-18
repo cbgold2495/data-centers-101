@@ -1,0 +1,100 @@
+---
+import SectionLayout from '../layouts/SectionLayout.astro';
+import PlainEnglish from '../components/PlainEnglish.astro';
+import StatBlock from '../components/StatBlock.astro';
+import PowerComparisonDiagram from '../components/diagrams/PowerComparisonDiagram.astro';
+import { withBase } from '../utils/url';
+
+const rackStats = [
+  { value: '5–10 kW', label: 'Traditional server rack' },
+  { value: '50–100 kW', label: 'AI server rack' },
+  { value: '100–750 MW', label: 'A single AI data center site' },
+  { value: '5+ years', label: 'Typical grid interconnection wait' },
+];
+---
+
+<SectionLayout
+  slug="power-energy"
+  kicker="Section 04"
+  title="Power & energy"
+  dek="Why electricity, not chips, is now the binding constraint on AI buildout."
+>
+  <PlainEnglish>
+    <p>
+      Building an AI data center used to be mostly about getting enough GPUs. Now the harder
+      problem is getting enough electricity. Power grids can't add capacity fast enough, so tech
+      companies are building their own gas plants, restarting old nuclear reactors, and signing
+      decades-long power contracts just to keep their computers running.
+    </p>
+  </PlainEnglish>
+
+  <StatBlock stats={rackStats} />
+
+  <h2>Why power became the bottleneck, not GPUs</h2>
+  <p>
+    An AI server rack now draws 50-100 kW, versus 5-10 kW for a traditional one, and a single AI data center site
+    can require 100-750 MW — enough to power a small city. Demand is growing faster than grids can respond:
+    connecting a new power source to the grid now takes 5+ years in many U.S. regions because of an
+    interconnection queue backlog, with over 2,300 GW of generation and storage projects currently waiting in
+    line. That mismatch — GPUs can be delivered in months, new power in years — is why "we have the chips but
+    nowhere to plug them in" has become a common story in this industry.
+  </p>
+
+  <h2>The three ways companies are solving it</h2>
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Approach</th><th>Speed to deploy</th><th>Tradeoff</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>On-site natural gas turbines</td>
+          <td>Fastest — 12-18 months</td>
+          <td>Reliable and weather-independent, but exposes the operator to fuel-price swings and creates a direct carbon liability</td>
+        </tr>
+        <tr>
+          <td>Nuclear <span class="section-note">(restarts + new small modular reactors)</span></td>
+          <td>Slow — years, but delivers steady 24/7 power once online</td>
+          <td>Microsoft's deal to restart the Three Mile Island plant (now renamed Crane) for roughly 835 MW is the clearest example; Meta has signed a 20-year deal for over 2,600 MW from existing nuclear plants</td>
+        </tr>
+        <tr>
+          <td>Renewables + storage</td>
+          <td>Fast to build, but intermittent</td>
+          <td>Solar and wind are the largest source of <em>new</em> grid capacity overall, but need batteries or backup power to cover gaps</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <PowerComparisonDiagram />
+
+  <p>
+    In practice, most large operators are doing all three at once — natural gas as a fast bridge, renewables for
+    volume, and nuclear for reliable long-term baseload — while also signing direct power-purchase agreements
+    (PPAs) that lock in electricity from a specific plant for 10-20+ years, bypassing the public grid's queue
+    entirely.
+  </p>
+
+  <h2>The knock-on effects worth including</h2>
+  <ul>
+    <li><strong>Rising electricity bills for ordinary consumers</strong> — in regions with heavy data-center buildout (e.g. parts of Virginia), local electricity prices have risen sharply as grids strain to serve new demand alongside existing customers; regional wholesale power-capacity prices in one major U.S. market rose over 800% between two recent delivery years.</li>
+    <li><strong>A political response</strong> — in March 2026, seven major AI/tech companies signed a "Ratepayer Protection Pledge," committing to directly fund grid upgrades themselves rather than passing those costs to residential customers.</li>
+    <li><strong>Global electricity demand from data centers is genuinely enormous</strong> — global data-center electricity consumption is on track to roughly double from 2024 to 2026, and AI is the primary driver of that growth.</li>
+  </ul>
+
+  <div class="callout-note">
+    Securing power increasingly requires the same kind of long-term capital commitments as GPUs do — the two
+    bottlenecks (compute and power) end up financed in similar ways. More on that in
+    <a href={withBase('/financing')}>Section 06: Financing</a>.
+  </div>
+</SectionLayout>
+
+<style>
+  .section-note {
+    font-family: var(--font-mono);
+    font-size: 0.75em;
+    font-weight: 400;
+    color: var(--text-tertiary);
+    text-transform: none;
+    letter-spacing: 0;
+  }
+</style>

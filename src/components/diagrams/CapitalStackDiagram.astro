@@ -1,0 +1,65 @@
+---
+// Diagram 4: the capital stack — project debt (safest, top) / corporate debt (middle) / equity (riskiest, bottom).
+---
+
+<div class="diagram-wrap">
+  <svg viewBox="0 0 640 300" role="img" aria-label="Diagram: a capital stack with project-level debt on top as safest, corporate debt in the middle, and equity at the bottom absorbing losses first">
+    <!-- risk arrow -->
+    <line x1="40" y1="30" x2="40" y2="250" class="risk-line" />
+    <polygon points="34,250 46,250 40,262" class="risk-arrow" />
+    <text x="22" y="140" text-anchor="middle" class="risk-label" transform="rotate(-90 22 140)">RISK &amp; RETURN INCREASE ↓</text>
+
+    <!-- stack bands -->
+    <rect x="90" y="30" width="500" height="66" rx="8" class="band band-1" />
+    <text x="340" y="56" text-anchor="middle" class="band-title">Project-level debt</text>
+    <text x="340" y="76" text-anchor="middle" class="band-sub">Safest · paid first · lowest return · backed by one project's contracted revenue</text>
+
+    <rect x="90" y="102" width="500" height="66" rx="8" class="band band-2" />
+    <text x="340" y="128" text-anchor="middle" class="band-title">Corporate debt</text>
+    <text x="340" y="148" text-anchor="middle" class="band-sub">Borrowed against the whole company's balance sheet</text>
+
+    <rect x="90" y="174" width="500" height="66" rx="8" class="band band-3" />
+    <text x="340" y="200" text-anchor="middle" class="band-title">Equity</text>
+    <text x="340" y="220" text-anchor="middle" class="band-sub">Riskiest · absorbs losses first · funds early-stage construction &amp; ramp-up</text>
+
+    <text x="340" y="270" text-anchor="middle" class="caption">Every layer above equity gets paid before equity investors see a return.</text>
+  </svg>
+</div>
+
+<style>
+  .diagram-wrap { margin: 1.8em 0 2.2em; }
+  svg { width: 100%; height: auto; }
+
+  .band { stroke-width: 1.5; }
+  .band-1 { fill: var(--accent-dim); stroke: var(--accent-border); }
+  .band-2 { fill: var(--bg-raised-2); stroke: var(--border-strong); }
+  .band-3 { fill: var(--highlight-dim); stroke: var(--highlight-border); }
+
+  .band-title {
+    font-family: var(--font-mono);
+    font-size: 15px;
+    font-weight: 700;
+    fill: var(--text-primary);
+  }
+  .band-sub {
+    font-family: var(--font-body);
+    font-size: 11.5px;
+    fill: var(--text-secondary);
+  }
+
+  .risk-line { stroke: var(--border-strong); stroke-width: 2; }
+  .risk-arrow { fill: var(--border-strong); }
+  .risk-label {
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    fill: var(--text-tertiary);
+  }
+
+  .caption {
+    font-family: var(--font-body);
+    font-size: 12.5px;
+    fill: var(--text-tertiary);
+  }
+</style>

@@ -1,0 +1,94 @@
+---
+interface BarItem {
+  label: string;
+  value: number;
+  display: string;
+  sub?: string;
+  color?: 'accent' | 'highlight' | 'teal';
+}
+
+interface Props {
+  items: BarItem[];
+  max?: number;
+}
+
+const { items, max } = Astro.props;
+const scaleMax = max ?? Math.max(...items.map((i) => i.value));
+---
+
+<div class="bar-chart">
+  {items.map((item) => (
+    <div class="bar-row">
+      <div class="bar-label">
+        <span>{item.label}</span>
+        {item.sub && <span class="bar-sub">{item.sub}</span>}
+      </div>
+      <div class="bar-track">
+        <div
+          class:list={['bar-fill', item.color ?? 'accent']}
+          style={`width: ${Math.min(100, (item.value / scaleMax) * 100)}%`}
+        ></div>
+      </div>
+      <div class="bar-value">{item.display}</div>
+    </div>
+  ))}
+</div>
+
+<style>
+  .bar-chart {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    margin: 1.6em 0 2.2em;
+  }
+
+  .bar-row {
+    display: grid;
+    grid-template-columns: 9rem 1fr 5.5rem;
+    align-items: center;
+    gap: 0.9rem;
+  }
+
+  .bar-label {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.88rem;
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  .bar-sub {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 400;
+    color: var(--text-tertiary);
+  }
+
+  .bar-track {
+    height: 0.6rem;
+    background: var(--bg-raised-2);
+    border-radius: 999px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 999px;
+  }
+  .bar-fill.accent { background: linear-gradient(90deg, var(--accent), var(--accent-strong)); }
+  .bar-fill.highlight { background: linear-gradient(90deg, var(--highlight), var(--highlight-strong)); }
+  .bar-fill.teal { background: var(--accent-2); }
+
+  .bar-value {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-align: right;
+  }
+
+  @media (max-width: 560px) {
+    .bar-row { grid-template-columns: 6.5rem 1fr 4.2rem; }
+  }
+</style>

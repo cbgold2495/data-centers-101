@@ -1,0 +1,147 @@
+---
+import SectionLayout from '../layouts/SectionLayout.astro';
+import PlainEnglish from '../components/PlainEnglish.astro';
+import StackDiagram from '../components/diagrams/StackDiagram.astro';
+---
+
+<SectionLayout
+  slug="structural-stack"
+  kicker="Section 01"
+  title="The structural stack"
+  dek="Data centers, neoclouds, hyperscalers, and inference clouds — who owns what, and how the layers connect."
+>
+  <PlainEnglish>
+    <p>
+      A data center is just a giant warehouse full of computers. Some companies own that warehouse
+      and rent out raw computer power — the newer, AI-only ones are called "neoclouds," the giant
+      do-everything ones are "hyperscalers." Other companies don't rent computers at all — they
+      rent you access to an AI model that's already running, charging you for how much you use it.
+      That's an "inference cloud." Apps you actually use sit on top of all of it, without you ever
+      seeing the computers underneath.
+    </p>
+  </PlainEnglish>
+
+  <h2>The one-line distinctions</h2>
+  <ul>
+    <li><strong>Data center</strong> — the physical building: space, power, cooling, and networking. This is the layer everything else sits inside.</li>
+    <li><strong>Hyperscaler</strong> — a general-purpose cloud giant (AWS, Azure, Google Cloud) that owns or leases hyperscale data centers and sells hundreds of services, GPU compute being just one.</li>
+    <li><strong>Neocloud</strong> — an AI-first compute provider (CoreWeave, Lambda, Nebius) that leases or builds data center space specifically to sell raw GPU capacity, with far less breadth than a hyperscaler.</li>
+    <li><strong>Inference cloud</strong> — a managed layer on top of either of the above that sells model APIs (tokens in, tokens out) rather than raw compute. Together AI, Fireworks, Groq, and the model labs' own APIs (OpenAI, Anthropic) live here.</li>
+  </ul>
+
+  <h2>Layer 1: Data centers (the physical layer)</h2>
+  <p>The building itself, classified by who owns it and how big it is:</p>
+
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Type</th><th>Who owns/operates it</th><th>Scale</th><th>Used for</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Enterprise / onsite</td><td>A single company, for its own use</td><td>Small–medium</td><td>Internal IT, not usually resold</td></tr>
+        <tr><td>Colocation</td><td>A specialist landlord (Equinix, Digital Realty, QTS)</td><td>Retail (cabinets) to wholesale (megawatt halls)</td><td>Businesses rent space, bring their own servers</td></tr>
+        <tr><td>Hyperscale</td><td>The cloud giant itself, or leased from a colo/wholesale developer</td><td>100 MW+ campuses, thousands of servers</td><td>Foundation of AWS/Azure/GCP regions</td></tr>
+        <tr><td>Edge / micro</td><td>Telcos, CDN operators</td><td>Under 100 kW, distributed</td><td>Low-latency, close to users (IoT, autonomous systems)</td></tr>
+        <tr><td>AI / GPU hall</td><td>Increasingly its own category — ultra-dense, liquid-cooled</td><td>Purpose-built for GPU racks</td><td>Training and inference clusters</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout-note">
+    <strong>Who owns what:</strong> neoclouds and hyperscalers don't necessarily <em>own</em> their buildings — many
+    neoclouds lease space and power from colocation/wholesale developers and fill it with their own GPUs, while
+    hyperscalers do a mix of owning and leasing. CoreWeave, for instance, leases data center space and buys GPUs;
+    it doesn't build its own campuses the way Google does.
+  </div>
+
+  <h2>Layer 2: Who sells the compute — neoclouds vs. hyperscalers</h2>
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th></th><th>Neoclouds</th><th>Hyperscalers</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Focus</td><td>AI-only: GPU compute, high-speed networking</td><td>General-purpose: hundreds of services, GPU is one of many</td></tr>
+        <tr><td>Examples</td><td>CoreWeave, Lambda, Nebius, Crusoe, IREN</td><td>AWS, Microsoft Azure, Google Cloud</td></tr>
+        <tr><td>Origin story</td><td>Several started in crypto mining, repurposed GPU fleets for AI</td><td>Built out from enterprise IT/web services over 15+ years</td></tr>
+        <tr><td>Hardware</td><td>Bare-metal access, latest NVIDIA GPUs, InfiniBand fabric</td><td>Virtualized first, custom silicon too (Google TPU, AWS Trainium/Inferentia)</td></tr>
+        <tr><td>Pricing</td><td>Simpler, usage-based, often cheaper per GPU-hour</td><td>Complex tiered pricing, enterprise discounts</td></tr>
+        <tr><td>Strength</td><td>Fast GPU access, purpose-built performance</td><td>Breadth, reliability, compliance, existing enterprise relationships</td></tr>
+        <tr><td>Weakness</td><td>Less enterprise reach, financing/scale risk</td><td>"Legacy drag" — retrofitting for GPU-era power/cooling needs</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>The ownership spectrum</h3>
+  <p>
+    Not all neoclouds relate to the physical data center the same way. It's a spectrum from "own nothing but the
+    GPUs" to "own the whole stack":
+  </p>
+
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Position</th><th>Model</th><th>Example</th><th>Notes</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Marketplace / aggregator</td>
+          <td>Doesn't own hardware or buildings — resells idle third-party GPU capacity</td>
+          <td>Vast.ai, SF Compute</td>
+          <td>Cheapest, least predictable; good for short experiments, not production</td>
+        </tr>
+        <tr>
+          <td>GPU owner, building lessee</td>
+          <td>Owns the GPUs and networking, leases the "powered shell" (space, power, cooling) from a landlord</td>
+          <td>CoreWeave (historically)</td>
+          <td>Fastest way to scale — no construction timeline — but embeds a long-term facility-cost premium (leasing typically costs more over time than owning)</td>
+        </tr>
+        <tr>
+          <td>Hybrid</td>
+          <td>Mix of owned campuses and leased colocation, shifting toward more ownership over time</td>
+          <td>CoreWeave (currently) — self-built sites like Kenilworth alongside leases from Core Scientific, Flexential, Chirisa; acquired Core Scientific itself for ~$9B to gain owned capacity and power</td>
+          <td>Shows the direction most neoclouds are heading: power, not GPUs, is the real bottleneck, so owning the building becomes the moat</td>
+        </tr>
+        <tr>
+          <td>Dedicated single-tenant builder</td>
+          <td>Builds custom facilities for one major customer at a time rather than self-serve access</td>
+          <td>Fluidstack — $50B build-out with Anthropic for Claude-dedicated data centers in Texas and New York</td>
+          <td>Blurs the line between "neocloud" and "build-to-suit contractor" for a model lab</td>
+        </tr>
+        <tr>
+          <td>Fully vertically integrated</td>
+          <td>Controls energy sourcing, data-center design/construction, and GPU deployment end to end</td>
+          <td>Crusoe — brought its Abilene facility online in under a year by controlling the whole chain</td>
+          <td>Fastest buildout, most predictable costs (no landlord markup), but the highest capital and operational lift</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>
+    The throughline: leasing is faster but structurally more expensive over the long run; owning is slower and
+    capital-intensive but cheaper per unit of compute over time. As power (not GPU supply) becomes the binding
+    constraint on growth, the neocloud sector as a whole is drifting from the "lease everything" end of this
+    spectrum toward the "own the power and the building" end.
+  </p>
+
+  <h2>Layer 3: Inference clouds — the managed API layer</h2>
+  <p>
+    Sits on top of neocloud or hyperscaler compute (or both) and sells access by the token instead of by the
+    GPU-hour:
+  </p>
+  <ul>
+    <li><strong>Third-party inference platforms</strong>: Together AI, Fireworks AI, Groq, Baseten, Replicate — run open models (Llama, Mistral, DeepSeek, etc.) as a service.</li>
+    <li><strong>Model labs' own APIs</strong>: OpenAI, Anthropic, Google — serve their own proprietary models directly.</li>
+  </ul>
+  <p>This is the layer most developers actually touch — they call an API and never see the GPU underneath.</p>
+
+  <h2>Layer 4: Applications</h2>
+  <p>
+    Chatbots, agents, copilots, and SaaS features that call an inference API. This is the top of the stack and
+    where most end users interact with all of the above without knowing it exists.
+  </p>
+
+  <h2>How it all connects</h2>
+  <StackDiagram />
+</SectionLayout>

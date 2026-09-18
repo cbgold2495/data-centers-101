@@ -1,0 +1,100 @@
+---
+import { sections, glossary, companyMap } from '../data/sections';
+import { withBase } from '../utils/url';
+---
+
+<footer class="site-footer">
+  <div class="container-wide footer-grid">
+    <div class="footer-brand">
+      <a href={withBase('/')} class="brand">
+        <span class="brand-mark" aria-hidden="true"></span>
+        Data Centers &amp; GPUs <span class="brand-101">101</span>
+      </a>
+      <p>A plain-English map of the AI infrastructure stack — from the physical building to who's financing all of it.</p>
+    </div>
+
+    <div class="footer-col">
+      <h4>Sections</h4>
+      <ul>
+        {sections.map((s) => <li><a href={withBase(`/${s.slug}`)}>{s.number} — {s.navLabel}</a></li>)}
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Reference</h4>
+      <ul>
+        <li><a href={withBase(`/${glossary.slug}`)}>{glossary.navLabel}</a></li>
+        <li><a href={withBase(`/${companyMap.slug}`)}>{companyMap.navLabel}</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="container-wide footer-bottom">
+    <span>Educational reference, not investment advice.</span>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--border);
+    margin-top: 5rem;
+    padding-top: 3rem;
+    background: var(--bg-inset);
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1fr;
+    gap: 2.5rem;
+    padding-bottom: 2.5rem;
+  }
+
+  .footer-brand p {
+    color: var(--text-tertiary);
+    font-size: 0.88rem;
+    margin-top: 0.9rem;
+    max-width: 30ch;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+  .brand-mark {
+    width: 0.55rem; height: 0.55rem;
+    background: var(--accent);
+    border-radius: 2px;
+  }
+  .brand-101 { color: var(--highlight); }
+
+  .footer-col h4 { margin-bottom: 1rem; }
+  .footer-col ul { list-style: none; padding: 0; margin: 0; }
+  .footer-col li { margin-bottom: 0.6rem; }
+  .footer-col li::marker { content: none; }
+  .footer-col a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.9rem;
+  }
+  .footer-col a:hover { color: var(--accent-strong); }
+
+  .footer-bottom {
+    border-top: 1px solid var(--border);
+    padding-block: 1.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  @media (max-width: 700px) {
+    .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+  }
+</style>

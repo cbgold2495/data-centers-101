@@ -1,0 +1,121 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { sections, glossary, companyMap } from '../data/sections';
+import { withBase } from '../utils/url';
+---
+
+<BaseLayout title="Home">
+  <section class="hero">
+    <div class="container-wide">
+      <span class="eyebrow">An educational reference</span>
+      <h1>Data Centers &amp; GPUs, <span class="accent">101</span></h1>
+      <p class="lede hero-lede">
+        The physical buildings, the chips, the money, and the electricity behind the AI boom —
+        explained in plain English first, with the tables and specs underneath for readers who want to go deeper.
+      </p>
+      <div class="hero-actions">
+        <a href={withBase(`/${sections[0].slug}`)} class="btn primary">Start with Section 01 &rarr;</a>
+        <a href={withBase(`/${companyMap.slug}`)} class="btn">Browse the company map</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="container-wide">
+    <h4 class="grid-label">The six sections</h4>
+    <div class="section-grid">
+      {sections.map((s) => (
+        <a href={withBase(`/${s.slug}`)} class="section-card">
+          <span class="card-num">{s.number}</span>
+          <h3>{s.navLabel}</h3>
+          <p>{s.dek}</p>
+        </a>
+      ))}
+    </div>
+
+    <h4 class="grid-label reference-label">Reference</h4>
+    <div class="reference-grid">
+      <a href={withBase(`/${glossary.slug}`)} class="section-card ref">
+        <h3>{glossary.title}</h3>
+        <p>{glossary.dek}</p>
+      </a>
+      <a href={withBase(`/${companyMap.slug}`)} class="section-card ref">
+        <h3>{companyMap.title}</h3>
+        <p>{companyMap.dek}</p>
+      </a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding-block: 4.5rem 3.5rem;
+    border-bottom: 1px solid var(--border);
+    background:
+      radial-gradient(50% 45% at 12% 0%, var(--accent-dim), transparent 70%),
+      radial-gradient(35% 35% at 85% 15%, var(--highlight-dim), transparent 70%),
+      var(--bg);
+  }
+  .hero h1 { margin-bottom: 1rem; }
+  .accent { color: var(--highlight); }
+  .hero-lede { max-width: 42rem; }
+  .hero-actions { display: flex; gap: 0.9rem; margin-top: 1.8rem; flex-wrap: wrap; }
+
+  .grid-label {
+    margin-top: 3.5rem;
+    margin-bottom: 1.2rem;
+  }
+  .reference-label { margin-top: 3rem; }
+
+  .section-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+  .reference-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    padding-bottom: 2rem;
+  }
+
+  .section-card {
+    display: block;
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.4rem 1.5rem;
+    text-decoration: none;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+  .section-card:hover {
+    border-color: var(--accent-border);
+    transform: translateY(-2px);
+    text-decoration: none;
+  }
+  .section-card h3 {
+    color: var(--text-primary);
+    margin: 0.6rem 0 0.5rem;
+    font-size: 1.05rem;
+  }
+  .section-card:hover h3 { color: var(--accent-strong); }
+  .section-card p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin: 0;
+  }
+  .section-card.ref h3 { margin-top: 0; }
+
+  .card-num {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--highlight);
+  }
+
+  @media (max-width: 900px) {
+    .section-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 600px) {
+    .section-grid, .reference-grid { grid-template-columns: 1fr; }
+  }
+</style>

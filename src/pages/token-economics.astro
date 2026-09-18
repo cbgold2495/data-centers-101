@@ -1,0 +1,116 @@
+---
+import SectionLayout from '../layouts/SectionLayout.astro';
+import PlainEnglish from '../components/PlainEnglish.astro';
+import LineChart from '../components/LineChart.astro';
+import { withBase } from '../utils/url';
+
+const priceCollapse = [
+  { label: '2022', value: 25, display: '$25' },
+  { label: '2023', value: 10, display: '$10' },
+  { label: '2024', value: 3, display: '$3' },
+  { label: '2025', value: 1.2, display: '$1.20' },
+  { label: '2026', value: 0.5, display: '<$1' },
+];
+---
+
+<SectionLayout
+  slug="token-economics"
+  kicker="Section 03"
+  title="Token economics"
+  dek="How inference is priced, why prices have collapsed 10x a year, and why that doesn't always mean cheaper AI."
+>
+  <PlainEnglish>
+    <p>
+      Every time you use an AI model, it's charged by the "word" (roughly) — tokens in (what you
+      typed) and tokens out (what it wrote back). Writing new words is more expensive than reading
+      old ones, so output costs more than input. Prices have crashed incredibly fast — the same
+      quality of answer that cost $20-30 per million words in 2022 costs under $1 today — but
+      because people also use AI so much more now, that doesn't always mean AI products are getting
+      cheaper to run overall.
+    </p>
+  </PlainEnglish>
+
+  <h2>The basic unit: input tokens vs. output tokens</h2>
+  <p>Pricing is quoted per million tokens, split into two rates:</p>
+  <ul>
+    <li><strong>Input tokens</strong> — everything sent to the model: your prompt, system instructions, chat history, retrieved documents, tool definitions. Cheaper, because the model can process all of it in parallel in one pass.</li>
+    <li><strong>Output tokens</strong> — everything the model generates back. More expensive — often 4-8x the input price — because generation happens one token at a time, in sequence (each new token depends on the ones before it), which is inherently slower and more compute-intensive per token.</li>
+  </ul>
+
+  <div class="callout-note">
+    <strong>The most-missed detail:</strong> because output costs several times more than input, a prompt that
+    asks for a long, detailed answer can cost far more than a prompt of the same length asking for a short one —
+    the input/output split matters more to your bill than total prompt length does.
+  </div>
+
+  <h2>Sample pricing <span class="section-note">(as of early 2026, illustrative — changes constantly)</span></h2>
+  <div class="table-scroll">
+    <table>
+      <thead>
+        <tr><th>Model</th><th>Input ($/M tokens)</th><th>Output ($/M tokens)</th><th>Output:input ratio</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Claude Opus (frontier)</td><td>~$5.00</td><td>~$25.00</td><td>5x</td></tr>
+        <tr><td>Claude Sonnet (mid-tier)</td><td>~$3.00</td><td>~$15.00</td><td>5x</td></tr>
+        <tr><td>GPT-5.2 (frontier)</td><td>~$1.75</td><td>~$14.00</td><td>8x</td></tr>
+        <tr><td>Gemini Flash (budget)</td><td>~$0.10</td><td>~$0.40</td><td>4x</td></tr>
+        <tr><td>Open-weight via inference clouds <span class="section-note">(Llama, DeepSeek, Qwen)</span></td><td>$0.05–$0.50</td><td>$0.20–$1.00</td><td>2-4x</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    The spread between the cheapest and most expensive options for a comparable task can be 100x or more — model
+    choice is one of the biggest cost levers a developer has. See how the different chips behind these prices
+    compare in <a href={withBase('/gpu-models')}>Section 02: GPU models</a>.
+  </p>
+
+  <h2>The price collapse — and why it happened</h2>
+  <p>
+    The cost of GPT-4-level performance has fallen roughly 10x per year since 2022 — from around $20-30 per
+    million tokens to under $1 today:
+  </p>
+  <LineChart points={priceCollapse} logScale unit=" / M tokens" />
+  <p>Five forces are driving it at once:</p>
+  <ol>
+    <li><strong>Cheaper compute per operation</strong> — each new GPU generation does more math per dollar.</li>
+    <li><strong>Quantization</strong> — running models at lower numerical precision (16-bit → 8-bit → 4-bit) trades a small accuracy cost for a large speed/cost gain.</li>
+    <li><strong>Smaller, more efficient models</strong> — architecture improvements let smaller models match older, larger ones.</li>
+    <li><strong>Open-weight competition</strong> — free-to-download models (Llama, DeepSeek, Qwen) force every provider's prices down.</li>
+    <li><strong>Software optimization</strong> — better serving techniques (batching, caching, speculative decoding) squeeze more throughput from the same hardware.</li>
+  </ol>
+
+  <h2>The margin math</h2>
+  <p>
+    The business logic behind an inference cloud or model API is simple in principle: gross margin = price
+    charged minus cost to serve, as a share of price. If it costs a provider $1.00 per million tokens to run a
+    model and they charge $2.00, that's a 50% gross margin; if their underlying cost drops to $0.40, the same
+    $2.00 price yields an 80% margin — which is exactly why providers are racing to cut serving costs rather than
+    just cutting prices.
+  </p>
+
+  <h2>The catch: headline price &ne; real cost</h2>
+  <p>Production usage is rarely just "prompt in, answer out." Real costs stack on top of the headline per-token price:</p>
+  <ul>
+    <li><strong>Reasoning/thinking tokens</strong> — some models generate hidden intermediate reasoning steps that are billed but never shown to the user.</li>
+    <li><strong>Context and history</strong> — every follow-up message resends the prior conversation, so long chats cost more per turn, not less.</li>
+    <li><strong>Tool calls and retries</strong> — agentic workflows that call tools, fail, and retry multiply token usage per completed task.</li>
+    <li><strong>Caching</strong> — reusing a previously-processed prompt prefix is often billed at a discount, which rewards designing prompts for reuse.</li>
+  </ul>
+  <p>
+    This produces what some call the <strong>cost paradox</strong>: per-token prices have fallen 10x a year, but
+    usage per product has grown even faster (sometimes 100x), so total inference spend for a fast-growing AI
+    product can rise even as unit prices fall — this is the thread that leads directly into
+    <a href={withBase('/financing')}>the financing section</a> next.
+  </p>
+</SectionLayout>
+
+<style>
+  .section-note {
+    font-family: var(--font-mono);
+    font-size: 0.55em;
+    font-weight: 500;
+    color: var(--text-tertiary);
+    text-transform: none;
+    letter-spacing: 0;
+  }
+</style>

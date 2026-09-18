@@ -1,0 +1,131 @@
+---
+// Diagram 5: power solutions compared — natural gas (fastest) vs. nuclear (slowest, steadiest) vs. renewables (fast, intermittent).
+interface Option {
+  title: string;
+  sub: string;
+  speedLabel: string;
+  speedPct: number; // higher = faster to deploy
+  reliability: 'steady' | 'intermittent';
+  color: 'accent' | 'highlight' | 'teal';
+}
+
+const options: Option[] = [
+  { title: 'Natural gas', sub: 'On-site turbines', speedLabel: '12–18 months', speedPct: 90, reliability: 'steady', color: 'highlight' },
+  { title: 'Nuclear', sub: 'Restarts + new SMRs', speedLabel: 'Years', speedPct: 25, reliability: 'steady', color: 'accent' },
+  { title: 'Renewables', sub: 'Solar + wind + storage', speedLabel: 'Fast to build', speedPct: 75, reliability: 'intermittent', color: 'teal' },
+];
+---
+
+<div class="power-grid">
+  {options.map((o) => (
+    <div class={`power-card ${o.color}`}>
+      <h4>{o.title}</h4>
+      <p class="sub">{o.sub}</p>
+
+      <div class="metric">
+        <span class="metric-label">Speed to deploy</span>
+        <div class="metric-track">
+          <div class="metric-fill" style={`width: ${o.speedPct}%`}></div>
+        </div>
+        <span class="metric-value">{o.speedLabel}</span>
+      </div>
+
+      <div class="reliability">
+        {o.reliability === 'steady' ? (
+          <svg viewBox="0 0 100 24" class="wave" preserveAspectRatio="none"><path d="M0,12 L100,12" /></svg>
+        ) : (
+          <svg viewBox="0 0 100 24" class="wave" preserveAspectRatio="none"><path d="M0,12 C10,2 20,2 30,12 C40,22 50,22 60,12 C70,2 80,2 90,12 L100,12" /></svg>
+        )}
+        <span class="reliability-label">{o.reliability === 'steady' ? '24/7 steady output' : 'Intermittent — needs storage'}</span>
+      </div>
+    </div>
+  ))}
+</div>
+
+<style>
+  .power-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin: 1.8em 0 2.2em;
+  }
+
+  .power-card {
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.2rem 1.3rem;
+  }
+  .power-card.highlight { border-color: var(--highlight-border); }
+  .power-card.accent { border-color: var(--accent-border); }
+  .power-card.teal { border-color: var(--accent-2); }
+
+  .power-card h4 {
+    text-transform: none;
+    letter-spacing: 0;
+    font-size: 1.05rem;
+    font-family: var(--font-mono);
+    color: var(--text-primary);
+    margin-bottom: 0.15rem;
+  }
+  .sub {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--text-tertiary);
+    margin-bottom: 1.1rem;
+  }
+
+  .metric { margin-bottom: 1.1rem; }
+  .metric-label {
+    display: block;
+    font-size: 0.7rem;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.4rem;
+  }
+  .metric-track {
+    height: 0.5rem;
+    background: var(--bg-raised-2);
+    border-radius: 999px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    margin-bottom: 0.4rem;
+  }
+  .metric-fill { height: 100%; border-radius: 999px; }
+  .power-card.highlight .metric-fill { background: linear-gradient(90deg, var(--highlight), var(--highlight-strong)); }
+  .power-card.accent .metric-fill { background: linear-gradient(90deg, var(--accent), var(--accent-strong)); }
+  .power-card.teal .metric-fill { background: var(--accent-2); }
+  .metric-value {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+
+  .reliability {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .wave {
+    width: 100%;
+    height: 20px;
+  }
+  .wave path {
+    fill: none;
+    stroke-width: 2;
+  }
+  .power-card.highlight .wave path { stroke: var(--highlight-strong); }
+  .power-card.accent .wave path { stroke: var(--accent-strong); }
+  .power-card.teal .wave path { stroke: var(--accent-2); }
+
+  .reliability-label {
+    font-size: 0.76rem;
+    color: var(--text-secondary);
+  }
+
+  @media (max-width: 720px) {
+    .power-grid { grid-template-columns: 1fr; }
+  }
+</style>

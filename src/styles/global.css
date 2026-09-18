@@ -1,0 +1,332 @@
+@import '@fontsource-variable/inter';
+@import '@fontsource/jetbrains-mono/400.css';
+@import '@fontsource/jetbrains-mono/500.css';
+@import '@fontsource/jetbrains-mono/700.css';
+
+/* ==========================================================================
+   Design tokens
+   ========================================================================== */
+
+:root {
+  /* Surfaces — cool graphite, faint violet cast rather than neutral/warm black */
+  --bg: #0a0a11;
+  --bg-raised: #131320;
+  --bg-raised-2: #1b1b2c;
+  --bg-inset: #06060b;
+  --border: #24243a;
+  --border-strong: #383856;
+
+  /* Text */
+  --text-primary: #e8e7ee;
+  --text-secondary: #a3a2b8;
+  --text-tertiary: #6e6d85;
+  --text-on-accent: #0f0d1c;
+
+  /* Primary accent: electric violet — interactive/navigation/brand */
+  --accent: #7c6cf0;
+  --accent-strong: #a99cff;
+  --accent-dim: rgba(124, 108, 240, 0.16);
+  --accent-border: rgba(124, 108, 240, 0.4);
+
+  /* Secondary accent: amber — reserved for numerals, stats, and the Plain English callout */
+  --highlight: #f5a623;
+  --highlight-strong: #ffc561;
+  --highlight-dim: rgba(245, 166, 35, 0.14);
+  --highlight-border: rgba(245, 166, 35, 0.35);
+
+  /* Tertiary accent: teal — charts & data cross-refs only */
+  --accent-2: #2dd4bf;
+  --accent-2-dim: rgba(45, 212, 191, 0.14);
+
+  /* Semantic */
+  --success: #4ade80;
+  --warning: #f5a623;
+  --danger: #f87171;
+
+  /* Typography */
+  --font-body: 'Inter Variable', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* Layout */
+  --content-width: 46rem;
+  --wide-width: 64rem;
+  --page-pad: 1.5rem;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 14px;
+  --header-h: 64px;
+
+  color-scheme: dark;
+}
+
+/* ==========================================================================
+   Reset & base
+   ========================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  background: var(--bg);
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img, svg { max-width: 100%; display: block; }
+
+a {
+  color: var(--accent-strong);
+  text-decoration-color: var(--accent-border);
+  text-underline-offset: 3px;
+}
+a:hover { text-decoration-color: var(--accent-strong); }
+
+h1, h2, h3, h4 {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  margin: 0 0 0.6em;
+}
+
+h1 { font-size: clamp(1.8rem, 1.4rem + 1.6vw, 2.6rem); }
+h2 { font-size: clamp(1.35rem, 1.15rem + 0.8vw, 1.7rem); margin-top: 2.4em; }
+h3 { font-size: 1.15rem; margin-top: 1.8em; color: var(--accent-strong); }
+h4 {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+}
+
+p { margin: 0 0 1.2em; color: var(--text-primary); }
+p.lede { font-size: 1.1rem; color: var(--text-secondary); }
+
+ul, ol { margin: 0 0 1.2em; padding-left: 1.3em; }
+li { margin-bottom: 0.5em; }
+li::marker { color: var(--accent); }
+
+strong { color: var(--text-primary); font-weight: 600; }
+
+code, kbd {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: var(--bg-raised-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.1em 0.4em;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 3em 0;
+}
+
+blockquote {
+  margin: 0 0 1.2em;
+  padding-left: 1em;
+  border-left: 3px solid var(--accent-border);
+  color: var(--text-secondary);
+}
+
+/* ==========================================================================
+   Layout helpers
+   ========================================================================== */
+
+.container {
+  max-width: var(--content-width);
+  margin-inline: auto;
+  padding-inline: var(--page-pad);
+}
+
+.container-wide {
+  max-width: var(--wide-width);
+  margin-inline: auto;
+  padding-inline: var(--page-pad);
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  margin-bottom: 0.9em;
+}
+
+.eyebrow::before {
+  content: '';
+  width: 1.4em;
+  height: 1px;
+  background: var(--accent);
+  display: inline-block;
+}
+
+/* ==========================================================================
+   Tables
+   ========================================================================== */
+
+.table-scroll {
+  overflow-x: auto;
+  margin: 0 0 1.6em;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+  min-width: 480px;
+}
+
+th, td {
+  text-align: left;
+  padding: 0.7em 0.9em;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+thead th {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent-strong);
+  background: var(--bg-raised-2);
+  white-space: nowrap;
+}
+
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover { background: var(--bg-raised); }
+
+/* ==========================================================================
+   Cards / callouts
+   ========================================================================== */
+
+.card {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.4rem 1.6rem;
+}
+
+.callout-plain {
+  background: var(--highlight-dim);
+  border: 1px solid var(--highlight-border);
+  border-radius: var(--radius-lg);
+  padding: 1.4rem 1.6rem;
+  margin: 1.6em 0 2.2em;
+  display: flex;
+  gap: 1rem;
+}
+
+.callout-plain .icon {
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  color: var(--highlight);
+}
+
+.callout-plain .label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--highlight);
+  margin-bottom: 0.5em;
+  display: block;
+}
+
+.callout-plain p:last-child { margin-bottom: 0; }
+.callout-plain p { color: var(--text-primary); }
+
+.callout-note {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent-2);
+  border-radius: var(--radius-md);
+  padding: 1rem 1.3rem;
+  margin: 1.6em 0;
+  font-size: 0.94rem;
+}
+
+/* ==========================================================================
+   Buttons / tags
+   ========================================================================== */
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 0.25em 0.6em;
+  border-radius: 999px;
+  border: 1px solid var(--border-strong);
+  color: var(--text-secondary);
+  background: var(--bg-raised-2);
+}
+
+.tag.accent {
+  color: var(--accent-strong);
+  border-color: var(--accent-border);
+  background: var(--accent-dim);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.65em 1.1em;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-strong);
+  color: var(--text-primary);
+  background: var(--bg-raised-2);
+  text-decoration: none;
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent-strong);
+  text-decoration: none;
+}
+
+.btn.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--text-on-accent);
+}
+
+.btn.primary:hover {
+  background: var(--accent-strong);
+  border-color: var(--accent-strong);
+  color: var(--text-on-accent);
+}
+
+/* ==========================================================================
+   Scrollbar (subtle, matches dark theme)
+   ========================================================================== */
+
+::selection { background: var(--accent-dim); color: var(--text-primary); }
